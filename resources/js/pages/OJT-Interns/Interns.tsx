@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout'
 import type { BreadcrumbItem } from '@/types'
-
+import  StudentsInterns  from "./Table-Interns/interns";
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -148,6 +148,9 @@ export default function Interns() {
             </CardContent>
           </Card>
 
+        </div>
+         <div className="mt-6">
+          <StudentsInterns />
         </div>
 
       </div>
