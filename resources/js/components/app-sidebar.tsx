@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { ChartColumnBig, User} from 'lucide-react';
+import { ChartColumnBig, UserRound} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -23,8 +23,8 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Interns',
-        href: '',
-        icon: User,
+        href: '/interns',
+        icon: UserRound,
     },
 ];
 
