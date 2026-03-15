@@ -3,9 +3,6 @@
 import { useState } from "react";
 import { DataTable } from "../data-table";
 import { internColumns, InternData } from "./column";
-import AppLayout from "@/layouts/app-layout";
-import type { BreadcrumbItem } from "@/types";
-
 
 export default function StudentsInterns() {
   const [data] = useState<InternData[]>([
@@ -62,7 +59,7 @@ export default function StudentsInterns() {
   const [selectedRow, setSelectedRow] = useState<InternData | null>(null);
 
   return (
-      <div className="py-6">
+      <div className="">
         <DataTable columns={internColumns(setSelectedRow)} data={data} />
       </div>
   );

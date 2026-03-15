@@ -30,8 +30,6 @@ export default function Interns() {
     <AppLayout breadcrumbs={breadcrumbs}>
       
       <div className="flex flex-col gap-6 p-6">
-
-        {/* HEADER */}
         <div className="flex items-center justify-between">
 
           <div>
@@ -54,12 +52,7 @@ export default function Interns() {
           </div>
 
         </div>
-
-
-        {/* STAT CARDS */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-
-          {/* TOTAL INTERNS */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-sm font-medium">
@@ -79,8 +72,6 @@ export default function Interns() {
             </CardContent>
           </Card>
 
-
-          {/* ACTIVE OJT */}
           <Card className='pl-4'>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-sm font-medium">
@@ -101,8 +92,6 @@ export default function Interns() {
             </CardContent>
           </Card>
 
-
-          {/* PENDING DOCS */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-sm font-medium">
@@ -123,8 +112,6 @@ export default function Interns() {
             </CardContent>
           </Card>
 
-
-          {/* AVG COMPLETION */}
           <Card className='pr-4'>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-sm font-medium">
@@ -139,8 +126,6 @@ export default function Interns() {
               <div className="text-2xl font-bold">
                 64%
               </div>
-
-              {/* Progress bar */}
               <div className="mt-2 h-2 w-full rounded-full bg-muted">
                 <div className="h-2 w-[64%] rounded-full bg-purple-500"></div>
               </div>
@@ -149,7 +134,7 @@ export default function Interns() {
           </Card>
 
         </div>
-         <div className="mt-6">
+         <div className="">
           <StudentsInterns />
         </div>
 

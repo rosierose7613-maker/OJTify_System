@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from "@/components/ui/badge";
 import {
     Table,
     TableBody,
@@ -22,6 +23,11 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import * as React from 'react';
+import {
+  Filter,
+  ArrowUpDown,
+  X
+} from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -48,62 +54,91 @@ export function DataTable<TData, TValue>({
             sorting,
             columnFilters,
         },
+          initialState: {
+            pagination: {
+                pageSize: 6,
+            },
+        },
     });
+    const pageIndex = table.getState().pagination.pageIndex;
+    const pageSize = table.getState().pagination.pageSize;
+    const totalRows = table.getFilteredRowModel().rows.length;
+
+    const start = pageIndex * pageSize + 1;
+    const end = Math.min(start + pageSize - 1, totalRows);
 
     return (
         <div>
-           <div className="flex items-center py-4 text-black">
+           <div className="flex items-center justify-between py-4 text-black">
             <Input
-              placeholder="Search..."
-              value={
-                (table
-                  .getColumn(
-                    table
-                      .getAllColumns()
-                      .find((col) => col.getCanFilter())?.id ?? ""
-                  )
-                  ?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) => {
-                const colId = table
-                  .getAllColumns()
-                  .find((col) => col.getCanFilter())?.id;
-                if (colId) {
-                  table.getColumn(colId)?.setFilterValue(event.target.value);
+                placeholder="Search student..."
+                value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                    table.getColumn("name")?.setFilterValue(event.target.value)
                 }
-              }}
-              className="max-w-sm"
-            />
-          </div>
+                className="max-w-sm"
+                />
+            <div className="flex gap-2">
+
+                    <Button variant="outline" className='text-gray-600'>
+                        <Filter className="to-gray-600  h-2 w-2" />
+                        Filters
+                    </Button>
+
+                    <Button variant="outline" className='text-gray-600'>
+                        <ArrowUpDown className="to-gray-600 h-2 w-2" />
+                        Sort
+                    </Button>
+
+                </div>
+            </div>
+            
+            <div className="flex items-center gap-2 pb-4">
+
+                <Badge variant="secondary" className='bg-blue-100 text-blue-500'>
+                    Status: Active
+                    <X className='to-blue-500'/>
+                </Badge>
+
+                <Badge variant="secondary">
+                    Company: All Partners
+                </Badge>
+
+                <Badge variant="secondary">
+                    Progress: Any
+                </Badge>
+
+                <Button variant="ghost" className='text-xs text-blue-500'>
+                    Clear all filters
+                </Button>
+
+            </div>
+
+          
             <div className="overflow-hidden rounded-md border">
                 <Table>
+
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead key={header.id} className='text-black'>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                      header.column.columnDef
-                                                          .header,
-                                                      header.getContext(),
-                                                  )}
-                                        </TableHead>
-                                    );
-                                })}
+                                {headerGroup.headers.map((header) => (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext(),
+                                            )}
+                                    </TableHead>
+                                ))}
                             </TableRow>
                         ))}
                     </TableHeader>
-                    <TableBody className='text-black'>
+
+                    <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                    className="data-[state=selected]:bg-transparent"
-                                    >
+                                <TableRow key={row.id}>
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
                                             {flexRender(
@@ -125,25 +160,41 @@ export function DataTable<TData, TValue>({
                             </TableRow>
                         )}
                     </TableBody>
+
                 </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4 text-black">
+             <div className="flex items-center justify-between py-4">
+                
+            <div className="text-sm text-muted-foreground">
+                Showing {start} to {end} of {totalRows} results
+            </div>
+
+            <div className="flex items-center gap-4">
+
                 <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
                 >
-                    Previous
+                Previous
                 </Button>
+
+                <span className="text-sm bg-blue-600 text-white px-3 py-1 rounded-md">
+                {table.getState().pagination.pageIndex + 1}
+                </span>
+
                 <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
                 >
-                    Next
+                Next
                 </Button>
+
+            </div>
+
             </div>
         </div>
     );
