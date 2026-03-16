@@ -13,9 +13,9 @@ import {
   Users,
   Briefcase,
   FileText,
-  BarChart3,
+  ChartNoAxesCombined,
   Plus,
-  Import
+  Download
 } from "lucide-react"
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -40,8 +40,8 @@ export default function Interns() {
           </div>
 
           <div className="flex gap-2">
-            <Button variant="outline">
-            <Import/>
+            <Button variant="outline" className='text-gray-500'>
+            <Download className='to-gray-500'/>
               Import Report
             </Button>
 
@@ -54,15 +54,17 @@ export default function Interns() {
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-sm font-medium">
+            <CardHeader className="flex flex-row items-center justify-between py-0">
+              <CardTitle className="text-sm font-medium text-gray-600">
                 Total Interns
               </CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground"/>
+              <div className="p-2 rounded-lg bg-blue-200">
+                <Users className="h-4 w-4 text-blue-600" />
+              </div>
             </CardHeader>
 
-            <CardContent>
-              <div className="text-2xl font-bold">
+            <CardContent className="pt-0 pb-3">
+              <div className="text-2xl font-bold pb-2">
                 1,248
               </div>
 
@@ -72,17 +74,18 @@ export default function Interns() {
             </CardContent>
           </Card>
 
-          <Card className='pl-4'>
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-sm font-medium">
+              <CardTitle className="text-sm font-medium  text-gray-600">
                 Active OJT
               </CardTitle>
-
-              <Briefcase className="h-4 w-4 text-muted-foreground"/>
+              <div className="p-2 rounded-lg bg-green-200">
+                <Briefcase className="h-4 w-4 text-green-600" />
+              </div>
             </CardHeader>
 
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-bold pb-2">
                 982
               </div>
 
@@ -94,15 +97,16 @@ export default function Interns() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-sm font-medium">
+              <CardTitle className="text-sm font-medium  text-gray-600">
                 Pending Docs
               </CardTitle>
-
-              <FileText className="h-4 w-4 text-muted-foreground"/>
+              <div className="p-2 rounded-lg bg-orange-200">
+                <FileText className="h-4 w-4 text-orange-600" />
+              </div>
             </CardHeader>
 
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-bold pb-2">
                 45
               </div>
 
@@ -112,18 +116,19 @@ export default function Interns() {
             </CardContent>
           </Card>
 
-          <Card className='pr-4'>
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-sm font-medium">
+              <CardTitle className="text-sm font-medium  text-gray-600">
                 Avg. Completion
               </CardTitle>
-
-              <BarChart3 className="h-4 w-4 text-muted-foreground"/>
+              <div className="p-2 rounded-lg bg-purple-200">
+                <ChartNoAxesCombined className="h-4 w-4 text-purple-600" />
+              </div>
             </CardHeader>
 
             <CardContent>
 
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-bold pb-2">
                 64%
               </div>
               <div className="mt-2 h-2 w-full rounded-full bg-muted">

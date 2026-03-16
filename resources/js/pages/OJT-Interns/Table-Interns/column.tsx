@@ -99,12 +99,12 @@ export const internColumns = (
           const percentage = Math.floor((hoursRendered / totalHours) * 100);
           return (
             <div className="flex flex-col gap-1">
-              <p className="text-sm">
+              <p className="text-xs text-bold">
                 {hoursRendered} / {totalHours} hrs
               </p>
-              <div className="w-full h-2 bg-gray-200 rounded-full">
+              <div className="w-full h-1.5 bg-gray-200 rounded-full">
                 <div
-                  className={`h-2 rounded-full ${
+                  className={`h-1.5 rounded-full ${
                     percentage > 80
                       ? "bg-green-500"
                       : percentage > 40
@@ -127,13 +127,13 @@ export const internColumns = (
           <div className="flex gap-2">
             {[1, 2, 3, 4].map((i) => {
               if (i <= dots) {
-                return <CircleCheck key={i} className="h-3 w-3 text-green-500" />;
+                return <CircleCheck key={i} className="h-3.5 w-3.5 text-green-500" />;
               } else if (i === dots + 1) {
-                return <CircleEllipsis key={i} className="h-3 w-3 text-orange-300" />;
+                return <CircleEllipsis key={i} className="h-3.5 w-3.5 text-orange-300" />;
               } else if (i === dots + 2) {
-                return <CircleAlert key={i} className="h-3 w-3 text-red-500" />;
+                return <CircleAlert key={i} className="h-3.5 w-3.5 text-red-500" />;
               } else {
-                return <CircleCheck key={i} className="h-3 w-3 text-gray-300" />;
+                return <CircleCheck key={i} className="h-3.5 w-3.5 text-gray-300" />;
               }
             })}
           </div>
@@ -152,7 +152,7 @@ export const internColumns = (
           };
           return (
             <span
-              className={`px-2 py-1 text-xs font-semibold rounded-full ${colors[status]}`}
+              className={`px-2 py-1 text-[10px] font-semibold rounded-full ${colors[status]}`}
             >
               {status}
             </span>
