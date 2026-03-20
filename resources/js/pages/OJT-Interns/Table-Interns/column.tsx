@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { CircleCheck, CircleEllipsis, CircleAlert } from "lucide-react";
+import { CircleCheck, CircleEllipsis, CircleAlert, Circle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -133,7 +133,7 @@ export const internColumns = (
               } else if (i === dots + 2) {
                 return <CircleAlert key={i} className="h-3.5 w-3.5 text-red-500" />;
               } else {
-                return <CircleCheck key={i} className="h-3.5 w-3.5 text-gray-300" />;
+                return <Circle key={i} className="h-3.5 w-3.5 text-gray-300" />;
               }
             })}
           </div>

@@ -2,6 +2,7 @@ import AppLayout from '@/layouts/app-layout'
 import type { BreadcrumbItem } from '@/types'
 import  StudentsInterns  from "./Table-Interns/interns";
 import { Button } from "@/components/ui/button"
+import AddStudent from './Dialogss/AddStudent';
 import {
   Card,
   CardContent,
@@ -14,7 +15,6 @@ import {
   Briefcase,
   FileText,
   ChartNoAxesCombined,
-  Plus,
   Download
 } from "lucide-react"
 
@@ -45,14 +45,11 @@ export default function Interns() {
               Import Report
             </Button>
 
-            <Button className='text-white bg-blue-600 hover:bg-blue-700'>
-            <Plus/>
-              Add Student
-            </Button>
+            <AddStudent/>
           </div>
 
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 px-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between py-0">
               <CardTitle className="text-sm font-medium text-gray-600">
@@ -139,7 +136,7 @@ export default function Interns() {
           </Card>
 
         </div>
-         <div className="">
+         <div className="px-4">
           <StudentsInterns />
         </div>
 

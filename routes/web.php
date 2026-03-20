@@ -12,6 +12,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::get('/interns',[Intern_Controller::class, 'index'])
-->name('/interns');
+->name('interns.index');
+Route::post('/interns',[Intern_Controller::class, 'store'])
+->name('interns.store');
 
 require __DIR__.'/settings.php';
