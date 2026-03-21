@@ -4,63 +4,53 @@ import { useState } from "react";
 import { DataTable } from "../data-table";
 import { internColumns, InternData } from "./column";
 
-export default function StudentsInterns() {
-  const [data] = useState<InternData[]>([
-    {
-      id: "1",
-      name: "John Carlo Magana",
-      studentId: "ID: 221820",
-      company: "Hero Apps",
-      role: "Web Developer Intern",
-      hoursRendered: 320,
-      totalHours: 450,
-      completion: 64,
-      docAudit: 3,
-      status: "ON-TRACK",
-    },
-    {
-      id: "2",
-      name: "Aizel Joy Vasquez",
-      studentId: "ID: 222218",
-      company: "Hero Apps",
-      role: "Web Developer Intern",
-      hoursRendered: 450,
-      totalHours: 480,
-      completion: 92,
-      docAudit: 3,
-      status: "EVALUATION PENDING",
-    },
-    {
-      id: "3",
-      name: "Ysmin Rose Reantazo",
-      studentId: "ID: 2021-00412",
-      company: "Comp Inc.",
-      role: "Editor Intern",
-      hoursRendered: 60,
-      totalHours: 480,
-      completion: 16,
-      docAudit: 1,
-      status: "AT RISK",
-    },
-    {
-      id: "4",
-      name: "Toffee",
-      studentId: "ID: 2021-00993",
-      company: "Quantara Solutions",
-      role: "Backend Intern",
-      hoursRendered: 210,
-      totalHours: 480,
-      completion: 43,
-      docAudit: 2,
-      status: "ON-TRACK",
-    },
-  ]);
+type InternRaw = {
+  id: number;
+  name: string;
+  studentid: string;
+  company: string;
+  overallhours: number;
+  renderedhours: number;
+};
+
+interface StudentsInternsProps {
+  interns: InternRaw[];
+}
+
+export default function StudentsInterns({ interns }: StudentsInternsProps) {
+
+  const formattedData: InternData[] = interns.map((item) => {
+    const completion = Math.floor((item.renderedhours / item.overallhours) * 100);
+
+    let docAudit = 1;
+    if (completion > 75) docAudit = 4;
+    else if (completion > 50) docAudit = 3;
+    else if (completion > 25) docAudit = 2;
+
+    let status: "ON-TRACK" | "EVALUATION PENDING" | "AT RISK";
+    if (completion >= 80) status = "ON-TRACK";
+    else if (completion >= 50) status = "EVALUATION PENDING";
+    else status = "AT RISK";
+
+    return {
+      id: item.id.toString(),
+      name: item.name,
+      studentId: item.studentid,
+      company: item.company,
+      role: "Intern",
+      hoursRendered: item.renderedhours,
+      totalHours: item.overallhours,
+      completion,
+      docAudit,
+      status,
+    };
+  });
 
   const [selectedRow, setSelectedRow] = useState<InternData | null>(null);
 
   return (
-      <div className="">
-        <DataTable columns={internColumns(setSelectedRow)} data={data} />
-      </div>
+    <div>
+      <DataTable columns={internColumns(setSelectedRow)} data={formattedData} />
+    </div>
   );
 }

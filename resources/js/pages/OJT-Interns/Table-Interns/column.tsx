@@ -71,7 +71,7 @@ export const internColumns = (
                 </div>
                 <div>
                   <p className="font-medium">{student.name}</p>
-                  <p className="text-xs text-muted-foreground">{student.studentId}</p>
+                  <p className="text-xs text-muted-foreground">ID {student.studentId}</p>
                 </div>
               </div>
             );
@@ -98,23 +98,28 @@ export const internColumns = (
           const { hoursRendered, totalHours } = row.original;
           const percentage = Math.floor((hoursRendered / totalHours) * 100);
           return (
-            <div className="flex flex-col gap-1">
-              <p className="text-xs text-bold">
+          <div className="flex flex-col gap-1 max-w-[180px]">
+            <div className="flex justify-between items-center text-xs ">
+              <span>
                 {hoursRendered} / {totalHours} hrs
-              </p>
-              <div className="w-full h-1.5 bg-gray-200 rounded-full">
-                <div
-                  className={`h-1.5 rounded-full ${
-                    percentage > 80
-                      ? "bg-green-500"
-                      : percentage > 40
-                      ? "bg-yellow-400"
-                      : "bg-red-500"
-                  }`}
-                  style={{ width: `${percentage}%` }}
-                />
-              </div>
+              </span>
+              <span className="text-gray-500 underline">
+                {percentage}%
+              </span>
             </div>
+            <div className="w-full h-1.5 bg-gray-200 rounded-full">
+              <div
+                className={`h-1.5 rounded-full ${
+                  percentage > 80
+                    ? "bg-green-500"
+                    : percentage > 40
+                    ? "bg-yellow-400"
+                    : "bg-red-500"
+                }`}
+                style={{ width: `${percentage}%` }}
+              />
+            </div>
+          </div>
           );
         },
       },
@@ -173,7 +178,12 @@ export const internColumns = (
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setSelectedRow(intern)}>
-                  <Eye className="mr-2 h-4 w-4" /> View
+                  <Button variant="outline" className="text-gray-600">
+                    Edit
+                  </Button>
+                  <Button variant="outline" className="text-gray-600">
+                    Delete
+                  </Button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

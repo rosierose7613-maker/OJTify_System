@@ -5,7 +5,6 @@ import {Plus} from 'lucide-react';
 import {Separator} from '@/components/ui/separator';
 import {Field, FieldGroup} from '@/components/ui/field';
 import { useForm } from '@inertiajs/react';
-import { route } from 'ziggy-js';
 import {
     Dialog, 
     DialogContent,

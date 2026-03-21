@@ -11,7 +11,8 @@ class Intern_Controller extends Controller
 {
     public function index(Request $request)
     {
-        return Inertia::render('OJT-Interns/Interns');
+        $interns = Intern::all();
+        return Inertia::render('OJT-Interns/Interns', compact('interns'));
     }
 
     public function store(Request $request)

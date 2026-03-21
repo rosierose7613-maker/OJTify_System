@@ -25,7 +25,8 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ]
 
-export default function Interns() {
+
+export default function Interns({ interns = [] }: { interns?: any[] }) {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       
@@ -137,7 +138,7 @@ export default function Interns() {
 
         </div>
          <div className="px-4">
-          <StudentsInterns />
+          <StudentsInterns interns={interns} />
         </div>
 
       </div>
