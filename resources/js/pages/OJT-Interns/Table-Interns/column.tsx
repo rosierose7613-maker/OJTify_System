@@ -1,16 +1,17 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { CircleCheck, CircleEllipsis, CircleAlert, Circle } from "lucide-react";
+import { CircleCheck, CircleEllipsis, CircleAlert, Circle, ChevronsUpDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { Eye, MoreVertical } from "lucide-react";
+import { MoreVertical } from "lucide-react";
+import { useForm  } from "@inertiajs/react";
+import Edit from '../Dialogss/Edit';
 
 export type InternData = {
   id: string;
@@ -25,29 +26,10 @@ export type InternData = {
   status: "ON-TRACK" | "EVALUATION PENDING" | "AT RISK";
 };
 
+
 export const internColumns = (
   setSelectedRow: (row: InternData) => void
 ): ColumnDef<InternData>[] => [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "name",
     enableColumnFilter: true,
@@ -58,6 +40,7 @@ export const internColumns = (
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Student Name
+        <ChevronsUpDown className="h-0.5 w-0.5"/>
         </Button>
       )
     },
@@ -86,6 +69,7 @@ export const internColumns = (
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
               Company
+            <ChevronsUpDown className="h-0.5 w-0.5"/>
             </Button>
           )
         },
@@ -103,7 +87,7 @@ export const internColumns = (
               <span>
                 {hoursRendered} / {totalHours} hrs
               </span>
-              <span className="text-gray-500 underline">
+              <span className="text-gray-500">
                 {percentage}%
               </span>
             </div>
@@ -169,6 +153,20 @@ export const internColumns = (
         header: "Actions",
         cell: ({ row }) => {
           const intern = row.original;
+          
+          const { processing, delete: destroy } = useForm();
+
+          const handleDelete = (id: string, name: string) => {
+            if (confirm(`Do you want to delete the intern - ${id}, ${name}?`)) {
+              destroy(`/interns/${id}`, {
+                preserveScroll: true,
+                onSuccess: () => {
+                  console.log("Deleted successfully");
+                },
+              });
+            }
+          };
+
           return (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -177,15 +175,14 @@ export const internColumns = (
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setSelectedRow(intern)}>
-                  <Button variant="outline" className="text-gray-600">
-                    Edit
-                  </Button>
-                  <Button variant="outline" className="text-gray-600">
-                    Delete
-                  </Button>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
+                <Edit/>
+              <DropdownMenuItem
+                onClick={() => handleDelete(intern.id, intern.name)}
+                className="text-red-500 hover:text-red-600"
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
             </DropdownMenu>
           );
         },

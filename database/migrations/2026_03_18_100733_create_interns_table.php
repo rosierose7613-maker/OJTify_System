@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('studentid', 6);
             $table->string('company');
             $table->integer('overallhours');
-            $table->integer('renderedhours');
+            $table->integer('renderedhours')->default(0);
             $table->timestamps();
         });
     }

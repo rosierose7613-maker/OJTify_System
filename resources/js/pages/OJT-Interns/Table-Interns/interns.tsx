@@ -44,6 +44,7 @@ export default function StudentsInterns({ interns }: StudentsInternsProps) {
       docAudit,
       status,
     };
+
   });
 
   const [selectedRow, setSelectedRow] = useState<InternData | null>(null);
@@ -52,5 +53,6 @@ export default function StudentsInterns({ interns }: StudentsInternsProps) {
     <div>
       <DataTable columns={internColumns(setSelectedRow)} data={formattedData} />
     </div>
+
   );
 }

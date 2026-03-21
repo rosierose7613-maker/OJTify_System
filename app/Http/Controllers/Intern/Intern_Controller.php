@@ -17,16 +17,26 @@ class Intern_Controller extends Controller
 
     public function store(Request $request)
     {
-    $request->validate([
-    'name' => 'required|string',
-    'studentid' => ['required', 'regex:/^[0-9]{6,9}$/'],
-    'company' => 'required|string',
-    'overallhours' => 'required|integer',
-    'renderedhours' => 'required|integer',
+     $request->validate([
+        'name' => 'required|string',
+        'studentid' => ['required', 'regex:/^[0-9]{6,9}$/'],
+        'company' => 'required|string',
+        'overallhours' => 'required|integer',
     ]);
 
-     Intern::create($request->all());
+    Intern::create(array_merge($request->all(), [
+        'renderedhours' => 0,
+    ]));
 
     return redirect()->back();
 }
+    public function edit(Intern $intern){
+        return Inertia::render('interns.edit', Compact('intern'));
+    }
+
+    public function destroy(Intern $intern){
+        $intern->delete();
+        return redirect()->route('interns.index')->with('message','Intern deleted Successfully');
+    }
+
 }

@@ -31,14 +31,14 @@ export default function AddStudent() {
     e.preventDefault();
     console.log("SUBMIT TRIGGERED");
 
-    post('/interns'), {
+    post('/interns', {
     onSuccess: () => {
         reset();
     },
     onError: () => {
         console.log('Validation failed');
     },
-    };
+    });
 };
   return (
       <div>
@@ -92,8 +92,9 @@ export default function AddStudent() {
                     <div className="space-y-2">
                     <Label>Student ID:</Label>
                     <Input
+                    placeholder="Student Id..." 
                     inputMode="numeric"
-                    maxLength={9}
+                    maxLength={6}
                     value={data.studentid}
                     onChange={(e) =>setData('studentid', e.target.value.replace(/[^0-9]/g, ''))}
                     />
@@ -108,26 +109,18 @@ export default function AddStudent() {
                     onChange={(e)=> setData('company', e.target.value)}/>
                     </div>
                 </Field>
-                <Field className="grid grid-cols-2 gap-4">
+                <Field className="gap-4">
                     <div className="space-y-2">
                     <Label>Overall Hours:</Label>
                     <Input 
-                    placeholder="Overall Hours" 
+                    placeholder="Overall Hours..." 
                     value={data.overallhours} 
                     onChange={(e)=> setData('overallhours', e.target.value)}
                     />
                     </div>
-                    <div className="space-y-2 pb-4">
-                    <Label>Hours Rendered:</Label>
-                    <Input 
-                    placeholder="Hours Rendered" 
-                    value={data.renderedhours} 
-                    onChange={(e)=> setData('renderedhours', e.target.value)}
-                    />
-                    </div>
                 </Field>
                 </FieldGroup>
-            <DialogFooter>
+            <DialogFooter className='pt-8'>
                 <Button 
                 type="submit"
                 onClick={handleSubmit}
