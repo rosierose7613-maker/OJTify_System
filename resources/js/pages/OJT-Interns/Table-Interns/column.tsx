@@ -175,7 +175,7 @@ export const internColumns = (
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <Edit/>
+              <Edit intern={intern} />
               <DropdownMenuItem
                 onClick={() => handleDelete(intern.id, intern.name)}
                 className="text-red-500 hover:text-red-600"

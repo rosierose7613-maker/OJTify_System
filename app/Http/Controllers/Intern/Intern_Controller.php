@@ -17,26 +17,43 @@ class Intern_Controller extends Controller
 
     public function store(Request $request)
     {
-     $request->validate([
-        'name' => 'required|string',
-        'studentid' => ['required', 'regex:/^[0-9]{6,9}$/'],
-        'company' => 'required|string',
-        'overallhours' => 'required|integer',
-    ]);
+        $request->validate([
+            'name' => 'required|string',
+            'studentid' => ['required', 'regex:/^[0-9]{6,9}$/'],
+            'company' => 'required|string',
+            'overallhours' => 'required|integer',
+        ]);
 
-    Intern::create(array_merge($request->all(), [
-        'renderedhours' => 0,
-    ]));
+        Intern::create(array_merge($request->all(), [
+            'renderedhours' => 0,
+        ]));
 
-    return redirect()->back();
-}
-    public function edit(Intern $intern){
-        return Inertia::render('interns.edit', Compact('intern'));
+        return redirect()->back();
     }
 
-    public function destroy(Intern $intern){
+    // 🔹 Add this method exactly like this
+    public function update(Request $request, Intern $intern)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'studentid' => ['required', 'regex:/^[0-9]{6,9}$/'],
+            'company' => 'required|string',
+            'overallhours' => 'required|integer',
+        ]);
+
+        $intern->update([
+            'name' => $request->name,
+            'studentid' => $request->studentid,
+            'company' => $request->company,
+            'overallhours' => $request->overallhours,
+        ]);
+
+        return redirect()->back()->with('message', 'Updated successfully');
+    }
+
+    public function destroy(Intern $intern)
+    {
         $intern->delete();
-        return redirect()->route('interns.index')->with('message','Intern deleted Successfully');
+        return redirect()->route('interns.index')->with('message', 'Intern deleted Successfully');
     }
-
 }

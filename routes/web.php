@@ -15,8 +15,8 @@ Route::get('/interns',[Intern_Controller::class, 'index'])
     ->name('interns.index');
 Route::post('/interns',[Intern_Controller::class, 'store'])
     ->name('interns.store');
-Route::post('/interns/{intern}/edit',[Intern_Controller::class, 'edit'])
-    ->name('interns.edit');
+Route::put('/interns/{intern}', [Intern_Controller::class, 'update'])
+    ->name('interns.update');
 Route::delete('/interns/{intern}', [Intern_Controller::class, 'destroy'])
     ->name('intern.destroy');
 
