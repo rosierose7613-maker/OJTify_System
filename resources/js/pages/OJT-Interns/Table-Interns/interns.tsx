@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { DataTable } from "../data-table";
+
 import { internColumns, InternData } from "./column";
 
 type InternRaw = {

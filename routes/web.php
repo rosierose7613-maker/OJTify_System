@@ -19,5 +19,14 @@ Route::put('/interns/{intern}', [Intern_Controller::class, 'update'])
     ->name('interns.update');
 Route::delete('/interns/{intern}', [Intern_Controller::class, 'destroy'])
     ->name('intern.destroy');
+Route::get('/interns/{intern}', [Intern_Controller::class, 'show'])
+    ->name('interns.show');
+
+    Route::get('/api/check-studentid/{id}', function ($id) {
+    return response()->json([
+        'exists' => \App\Models\Intern::where('studentid', $id)->exists()
+    ]);
+});
+
 
 require __DIR__.'/settings.php';

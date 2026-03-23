@@ -5,6 +5,7 @@ import {Plus} from 'lucide-react';
 import {Separator} from '@/components/ui/separator';
 import {Field, FieldGroup} from '@/components/ui/field';
 import { useForm } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 import {
     Dialog, 
     DialogContent,
@@ -27,16 +28,27 @@ export default function AddStudent() {
         renderedhours:''
     });
 
-   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("SUBMIT TRIGGERED");
+    const [idExists, setIdExists] = useState(false);
 
-    post('/interns', {
-    onSuccess: () => {
-        reset();
-    },
-    onError: () => {
-        console.log('Validation failed');
+        useEffect(() => {
+        if (!data.studentid) return;
+        fetch(`/api/check-studentid/${data.studentid}`)
+            .then(res => res.json())
+            .then(res => setIdExists(res.exists));
+        }, [data.studentid]);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log("SUBMIT TRIGGERED");
+
+        post('/interns', {
+        onSuccess: () => {
+            reset();
+        },
+        onError: (errors) => {
+        if (errors.studentid) {
+        alert("Student already exists!");
+        }
     },
     });
 };
@@ -57,7 +69,7 @@ export default function AddStudent() {
                     <DialogDescription>Add your student here. Click save when your done.</DialogDescription>                   
                 </DialogHeader>
                 <FieldGroup>
-                    <div className='gap-4 pt-4'>
+                    <div className='gap-4'>
                         {recentlySuccessful && (
                         <Alert className="bg-green-100 border-green-400 mt-2">
                             <InfoIcon />
@@ -121,13 +133,12 @@ export default function AddStudent() {
                 </Field>
                 </FieldGroup>
             <DialogFooter className='pt-8'>
-                <Button 
+                <Button
                 type="submit"
-                onClick={handleSubmit}
-                disabled={processing}
-                className='bg-blue-500 hover:bg-blue-700'
+                disabled={processing || idExists} // disables Save if ID exists
+                className="bg-blue-500 hover:bg-blue-700"
                 >
-                {processing ? 'Saving...' : 'Save'}
+                {processing ? 'Saving...' : idExists ? 'ID already exists' : 'Save'}
                 </Button>
             </DialogFooter>
                          </form>

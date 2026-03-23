@@ -16,6 +16,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
+import { InfoIcon } from 'lucide-react';
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 interface InternEdit {
@@ -33,7 +35,7 @@ interface Props {
 export default function Edit({ intern }: Props) {
   const [open, setOpen] = useState(false);
 
-  const { data, setData, put, processing, errors } = useForm({
+  const { data, setData, put, processing, errors, recentlySuccessful  } = useForm({
     name: intern.name,
     studentid: intern.studentId,
     company: intern.company,
@@ -45,7 +47,7 @@ export default function Edit({ intern }: Props) {
 
   put(`/interns/${intern.id}`, {
     onSuccess: () => {
-      setOpen(false);
+    setTimeout(() => setOpen(false), 1500);
     },
   });
 };
@@ -59,7 +61,9 @@ export default function Edit({ intern }: Props) {
             setOpen(true);
           }}
         >
+        <span className="cursor-pointer transition-colors">
           Edit
+        </span>
         </DropdownMenuItem>
 
         <DialogContent className="sm:max-w-xl">
@@ -71,9 +75,20 @@ export default function Edit({ intern }: Props) {
                 Edit this student here. Click save when you're done.
               </DialogDescription>
             </DialogHeader>
+            <div className="gap-4 pt-4">
+              {recentlySuccessful && (
+              <Alert className="bg-green-100 border-green-400 mt-2">
+                <InfoIcon />
+                <AlertTitle>Success</AlertTitle>
+                <AlertDescription>
+                  Student successfully edited in the database!
+                </AlertDescription>
+              </Alert>
+            )}
+            </div>
 
             <FieldGroup>
-              <Field className="gap-4">
+              <Field className="gap-4 pt-4">
                 <div className="space-y-2">
                   <Label>Student Name:</Label>
                   <Input
@@ -84,14 +99,15 @@ export default function Edit({ intern }: Props) {
               </Field>
 
               <Field className="gap-4">
-                <div className="space-y-2">
-                  <Label>Student ID:</Label>
-                  <Input
-                    value={data.studentid}
-                    onChange={(e) => setData("studentid", e.target.value)}
-                  />
-                </div>
-              </Field>
+              <div className="space-y-2">
+                <Label>Student ID:</Label>
+                <Input
+                  value={data.studentid}
+                  readOnly
+                  className="bg-gray-100 cursor-not-allowed"
+                />
+              </div>
+            </Field>
 
               <Field className="gap-4">
                 <div className="space-y-2">

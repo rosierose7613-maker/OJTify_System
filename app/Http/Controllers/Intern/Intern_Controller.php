@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Intern;
 use App\Models\Intern;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class Intern_Controller extends Controller
@@ -12,7 +13,41 @@ class Intern_Controller extends Controller
     public function index(Request $request)
     {
         $interns = Intern::all();
-        return Inertia::render('OJT-Interns/Interns', compact('interns'));
+
+        $totalInterns = $interns->count();
+
+        $activeOjt = $interns->whereIn('status', ['ON-TRACK', 'EVALUATION PENDING'])->count();
+
+        $pendingDocs = $interns->where('docAudit', '<', 4)->count();
+
+        $totalRendered = $interns->sum('renderedhours');
+        $totalRequired = $interns->sum('overallhours');
+
+        $avgCompletion = $totalRequired > 0 
+            ? round(($totalRendered / $totalRequired) * 100)
+            : 0;
+
+        $currentYear = now()->year;
+        $lastYear = $currentYear - 1;
+
+        $currentInterns = Intern::whereYear('created_at', $currentYear)->count();
+
+        $lastSemesterTotal = Intern::whereYear('created_at', $lastYear)->count();
+
+        $growth = $lastSemesterTotal > 0
+            ? round((($currentInterns - $lastSemesterTotal) / $lastSemesterTotal) * 100)
+            : 0;
+
+        return Inertia::render('OJT-Interns/Interns', [
+            'interns' => $interns,
+            'stats' => [
+                'totalInterns' => $totalInterns,
+                'activeOjt' => $activeOjt,
+                'pendingDocs' => $pendingDocs,
+                'avgCompletion' => $avgCompletion,
+                'growth' => $growth, 
+            ]
+        ]);
     }
 
     public function store(Request $request)
@@ -31,14 +66,17 @@ class Intern_Controller extends Controller
         return redirect()->back();
     }
 
-    // 🔹 Add this method exactly like this
     public function update(Request $request, Intern $intern)
     {
         $request->validate([
-            'name' => 'required|string',
-            'studentid' => ['required', 'regex:/^[0-9]{6,9}$/'],
-            'company' => 'required|string',
-            'overallhours' => 'required|integer',
+            'name' => ['required', 'string'],
+            'studentid' => [
+                'required',
+                'regex:/^[0-9]{6,9}$/',
+                Rule::unique('interns', 'studentid')->ignore($intern->id),
+            ],
+            'company' => ['required', 'string'],
+            'overallhours' => ['required', 'integer'],
         ]);
 
         $intern->update([
@@ -56,4 +94,12 @@ class Intern_Controller extends Controller
         $intern->delete();
         return redirect()->route('interns.index')->with('message', 'Intern deleted Successfully');
     }
+
+    public function show(Intern $intern)
+    {
+        return Inertia::render('OJT-Interns/View-Details', [
+            'student' => $intern
+        ]);
+    }
+
 }

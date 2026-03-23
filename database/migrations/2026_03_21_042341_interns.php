@@ -11,7 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::create('interns', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('studentid', 6);
+            $table->string('company');
+            $table->integer('overallhours');
+            $table->integer('renderedhours');
+            $table->timestamps();
+        });
     }
 
     /**

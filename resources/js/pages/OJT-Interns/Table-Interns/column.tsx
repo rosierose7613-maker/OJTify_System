@@ -10,7 +10,8 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
-import { useForm  } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 import Edit from '../Dialogss/Edit';
 
 export type InternData = {
@@ -44,22 +45,27 @@ export const internColumns = (
         </Button>
       )
     },
-      enableSorting: true,
-          cell: ({ row }) => {
-            const student = row.original;
-            return (
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold">
-                  {student.name.charAt(0)}
-                </div>
-                <div>
-                  <p className="font-medium">{student.name}</p>
-                  <p className="text-xs text-muted-foreground">ID {student.studentId}</p>
-                </div>
-              </div>
-            );
-          },
-        },
+    enableSorting: true,
+    cell: ({ row }) => {
+      const student = row.original;
+      return (
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold">
+            {student.name.charAt(0)}
+          </div>
+          <div>
+            <Link
+              href={`/interns/${student.id}`} 
+              className="font-medium text-black hover:underline"
+            >
+              {student.name}
+            </Link>
+            <p className="text-xs text-muted-foreground">ID {student.studentId}</p>
+          </div>
+        </div>
+      );
+    },
+  },
       {
         accessorKey: "company",
         header: ({ column }) => {
@@ -178,9 +184,10 @@ export const internColumns = (
               <Edit intern={intern} />
               <DropdownMenuItem
                 onClick={() => handleDelete(intern.id, intern.name)}
-                className="text-red-500 hover:text-red-600"
               >
+              <span className="text-red-500 hover:text-red-600 cursor-pointer transition-colors">
                 Delete
+              </span>
               </DropdownMenuItem>
             </DropdownMenuContent>
             </DropdownMenu>
