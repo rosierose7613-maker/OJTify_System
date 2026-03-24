@@ -19,19 +19,19 @@ interface Student {
   executiveSummary: string;
 }
 
-    const breadcrumbs: BreadcrumbItem[] = [
-    {
-      title: "Interns",
-      href: "/interns",
-    },
-  ];
+  //   const breadcrumbs: BreadcrumbItem[] = [
+  //   {
+  //     title: "Interns",
+  //     href: "/interns",
+  //   },
+  // ];
 
 
 export default function ViewDetails() {
   const { student } = usePage<{ student: Student }>().props;
 
   return (
-    <AppLayout breadcrumbs={breadcrumbs}>
+    // <AppLayout breadcrumbs={breadcrumbs}>
     <div className="flex flex-col md:flex-row gap-6 p-6">
       
       {/* Left: Student Profile */}
@@ -95,6 +95,6 @@ export default function ViewDetails() {
         </div>
       </div>
     </div>
-</AppLayout>
+// </AppLayout>
   );
 }

@@ -21,6 +21,8 @@ Route::delete('/interns/{intern}', [Intern_Controller::class, 'destroy'])
     ->name('intern.destroy');
 Route::get('/interns/{intern}', [Intern_Controller::class, 'show'])
     ->name('interns.show');
+Route::post('/interns/import', [Intern_Controller::class, 'import'])
+    ->name('interns.import');
 
     Route::get('/api/check-studentid/{id}', function ($id) {
     return response()->json([

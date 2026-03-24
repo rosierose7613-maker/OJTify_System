@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
+use App\Imports\InternsImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class Intern_Controller extends Controller
 {
     public function index(Request $request)
@@ -95,6 +98,33 @@ class Intern_Controller extends Controller
         return redirect()->route('interns.index')->with('message', 'Intern deleted Successfully');
     }
 
+    
+
+    public function import(Request $request)
+{
+    $request->validate([
+        'file' => 'required|mimes:xlsx,xls'
+    ]);
+
+    $file = $request->file('file');
+
+    if ($file) {
+        try {
+            Excel::import(new InternsImport, $file);
+
+            return back()->with('message', 'Students imported successfully!');
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'file' => 'Import failed: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    return back()->withErrors([
+        'file' => 'No file uploaded'
+    ]);
+}
+    
     public function show(Intern $intern)
     {
         return Inertia::render('OJT-Interns/View-Details', [
