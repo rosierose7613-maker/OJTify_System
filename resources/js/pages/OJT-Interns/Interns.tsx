@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { usePage } from "@inertiajs/react";
 import AddStudent from './Dialogss/AddStudent';
 import { useForm } from "@inertiajs/react";
+import ImportDialog from './Dialogss/ImportReport';
 import { useRef } from "react";
 import {
   Card,
@@ -39,30 +40,9 @@ type PageProps = {
 
 export default function Interns({ interns = [] }: { interns?: any[] }) {
   const { stats } = usePage<PageProps>().props;
-  const { errors } = usePage().props as any;
-
   const activePercent = stats.totalInterns > 0
     ? Math.round((stats.activeOjt / stats.totalInterns) * 100)
     : 0;
-
-  const fileInput = useRef<HTMLInputElement | null>(null);
-
-  const { post, setData } = useForm({
-    file: null as File | null,
-  });
-
-  const handleImport = () => {
-  const file = fileInput.current?.files?.[0];
-  console.log("Selected file:", file);
-  if (!file) return;
-
-  setData("file", file);
-
-  post("/interns/import", {
-    forceFormData: true,
-    onSuccess: () => { console.log("Import success"); },
-  });
-};
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -77,23 +57,8 @@ export default function Interns({ interns = [] }: { interns?: any[] }) {
             </p>
           </div>
 
-          <div className="flex gap-2">
-          <input
-            type="file"
-            ref={fileInput}
-            accept=".xlsx,.xls"
-            className="hidden"
-            onChange={handleImport} 
-          />
-          <Button 
-
-            variant="outline" 
-            className='text-gray-500'
-            onClick={() => fileInput.current?.click()} 
-          >
-            <Download className='to-gray-500'/>
-            Import Report
-          </Button>
+          <div className="flex gap-2">        
+          <ImportDialog/>
 
           <AddStudent/>
         </div>
