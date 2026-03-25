@@ -81,7 +81,7 @@ export default function Edit({ intern }: Props) {
                 <InfoIcon />
                 <AlertTitle>Success</AlertTitle>
                 <AlertDescription>
-                  Student successfully edited in the database!
+                  Student successfully edited!
                 </AlertDescription>
               </Alert>
             )}

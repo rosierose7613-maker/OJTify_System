@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('company');
             $table->integer('overallhours');
             $table->integer('renderedhours')->default(0);
+            $table->integer('tasks_logged')->default(0);
+            $table->integer('ai_performance')->default(0);
+            $table->text('executive_summary')->nullable();
             $table->timestamps();
         });
     }

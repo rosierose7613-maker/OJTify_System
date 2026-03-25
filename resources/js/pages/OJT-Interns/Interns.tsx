@@ -1,12 +1,9 @@
 import AppLayout from '@/layouts/app-layout'
 import type { BreadcrumbItem } from '@/types'
 import  StudentsInterns  from "./Table-Interns/interns";
-import { Button } from "@/components/ui/button"
 import { usePage } from "@inertiajs/react";
 import AddStudent from './Dialogss/AddStudent';
-import { useForm } from "@inertiajs/react";
 import ImportDialog from './Dialogss/ImportReport';
-import { useRef } from "react";
 import {
   Card,
   CardContent,

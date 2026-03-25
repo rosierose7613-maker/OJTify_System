@@ -13,13 +13,32 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class Intern_Controller extends Controller
 {
+
+    private function getStatus($completion)
+    {
+        return match (true) {
+            $completion >= 80 => 'ON-TRACK',
+            $completion >= 50 => 'EVALUATION PENDING',
+            default => 'AT RISK',
+        };
+    }
+
+
     public function index(Request $request)
     {
         $interns = Intern::all();
 
         $totalInterns = $interns->count();
 
-        $activeOjt = $interns->whereIn('status', ['ON-TRACK', 'EVALUATION PENDING'])->count();
+        $activeOjt = $interns->filter(function ($intern) {
+            $completion = $intern->overallhours > 0
+                ? ($intern->renderedhours / $intern->overallhours) * 100
+                : 0;
+
+            $status = $this->getStatus($completion);
+
+            return in_array($status, ['ON-TRACK', 'EVALUATION PENDING']);
+        })->count();        
 
         $pendingDocs = $interns->where('docAudit', '<', 4)->count();
 
@@ -127,8 +146,31 @@ class Intern_Controller extends Controller
     
     public function show(Intern $intern)
     {
+        $completion = $intern->overallhours > 0
+            ? round(($intern->renderedhours / $intern->overallhours) * 100)
+            : 0;
+
+        $status = match (true) {
+            $completion >= 80 => 'ON-TRACK',
+            $completion >= 50 => 'EVALUATION PENDING',
+            default => 'AT RISK',
+        };
+
         return Inertia::render('OJT-Interns/View-Details', [
-            'student' => $intern
+            'student' => [
+                'name' => $intern->name,
+                'studentId' => $intern->studentid,
+                'role' => 'Intern',
+                'course' => 'BSIT',
+
+                'totalHours' => $intern->overallhours,
+                'tasksLogged' => $intern->tasks_logged ?? 0,
+                'aiPerformance' => $intern->ai_performance ?? 0,
+                'milestoneProgress' => $completion,
+
+                'status' => $status,
+                'executiveSummary' => $intern->executive_summary ?? 'No summary available.'
+            ]
         ]);
     }
 

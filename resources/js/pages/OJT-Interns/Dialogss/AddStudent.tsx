@@ -75,7 +75,7 @@ export default function AddStudent() {
                             <InfoIcon />
                             <AlertTitle>Success</AlertTitle>
                             <AlertDescription>
-                            Student successfully added to database!
+                            Student successfully added!
                             </AlertDescription>
                         </Alert>
                         )}
