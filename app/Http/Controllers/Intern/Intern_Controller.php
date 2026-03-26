@@ -68,7 +68,10 @@ class Intern_Controller extends Controller
         });
 
         $pendingDocs = $interns->sum(function ($intern) {
-            return $intern->total_documents - $intern->documentaudit;
+            $totalDocs = is_numeric($intern->total_documents) ? $intern->total_documents : 0;
+            $docAudit = is_numeric($intern->documentaudit) ? $intern->documentaudit : 0;
+
+            return $totalDocs - $docAudit;
         });
 
         $totalInterns = $interns->count();

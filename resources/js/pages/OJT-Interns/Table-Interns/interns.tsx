@@ -40,9 +40,14 @@ export default function StudentsInterns({ interns }: StudentsInternsProps) {
     };
   });
   
-  const batchYears = Array.from(
-    new Set(formattedData.map(i => i.batchyear.trim()))
-  );
+    const batchYears = Array.from(
+      new Set(
+        formattedData
+          .map(i => i.batchyear)
+          .filter(Boolean)
+          .map(i => i.trim())
+      )
+    );
   const [selectedRow, setSelectedRow] = useState<InternData | null>(null);
 
   return (

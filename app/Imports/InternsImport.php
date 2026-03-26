@@ -25,6 +25,7 @@ class InternsImport implements ToModel, WithStartRow
             'overallhours' => $row[5],
             'renderedhours' => $row[6] ?? 0,
             'documentaudit' => $row[7] ?? 0,
+            'total_documents' => 4,
             'batchyear' => $row[8],
         ]
     );

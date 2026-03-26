@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {DropdownMenuCheckboxes} from './Table-Interns/batchdropdown';
+import BatchYearFilter from './Data-table/batchyearfilter';
 import {
     Table,
     TableBody,
@@ -42,17 +42,10 @@ export function DataTable<TData extends WithBatchYear, TValue>({
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([]);
-    
-    const [selectedBatch, setSelectedBatch] = React.useState<string | null>(null);
 
-    const filteredData = selectedBatch
-    ? data.filter((item: any) => 
-        item.batchyear?.trim() === selectedBatch?.trim()
-        )
-    : data;
-    
+        
     const table = useReactTable({
-        data: filteredData,
+        data: data,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -77,9 +70,8 @@ export function DataTable<TData extends WithBatchYear, TValue>({
     const start = pageIndex * pageSize + 1;
     const end = Math.min(start + pageSize - 1, totalRows);
     
-    console.log("Selected Batch:", selectedBatch);
-    console.log("All BatchYears:", data.map((d: any) => d.batchyear));
     
+
     
     return (
         <div>
@@ -92,14 +84,15 @@ export function DataTable<TData extends WithBatchYear, TValue>({
                 }
                 className="max-w-sm"
                 />
-            <div className="ml-auto">
-                <DropdownMenuCheckboxes 
+            <div className='flex'>
+             <div className="ml-auto">
+                <BatchYearFilter 
+                table={table}
                 batchYears={batchYears}
-                onSelect={setSelectedBatch}
                 />
+                </div>
             </div>
             </div>
-            
             <div className="overflow-hidden rounded-md border">
                 <Table>
 

@@ -35,41 +35,48 @@ export type InternData = {
 export const internColumns = (
   setSelectedRow: (row: InternData) => void
 ): ColumnDef<InternData>[] => [
-  {
-    accessorKey: "name",
-    enableColumnFilter: true,
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Student Name
-        <ChevronsUpDown className="h-0.5 w-0.5"/>
-        </Button>
-      )
-    },
-    enableSorting: true,
-    cell: ({ row }) => {
-      const student = row.original;
-      return (
-        <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold">
-            {student.name.charAt(0)}
-          </div>
-          <div>
-            <Link
-              href={`/interns/${student.id}`} 
-              className="font-medium text-black hover:underline"
+      {
+        accessorKey: "name",
+        enableColumnFilter: true,
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              {student.name}
-            </Link>
-            <p className="text-xs text-muted-foreground">ID {student.studentId}</p>
-          </div>
-        </div>
-      );
+              Student Name
+            <ChevronsUpDown className="h-0.5 w-0.5"/>
+            </Button>
+          )
+        },
+        enableSorting: true,
+        cell: ({ row }) => {
+          const student = row.original;
+          return (
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold">
+                {student.name.charAt(0)}
+              </div>
+              <div>
+                <Link
+                  href={`/interns/${student.id}`} 
+                  className="font-medium text-black hover:underline"
+                >
+                  {student.name}
+                </Link>
+                <p className="text-xs text-muted-foreground">ID {student.studentId}</p>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+      accessorKey: "batchyear",
+      header: "Batch Year",
+      filterFn: (row, id, value) => {
+        return row.getValue(id) === value
+      }
     },
-  },
       {
         accessorKey: "company",
         header: ({ column }) => {
@@ -90,7 +97,9 @@ export const internColumns = (
         header: "Hours Rendered",
         cell: ({ row }) => {
           const { hoursRendered, totalHours } = row.original;
-          const percentage = Math.floor((hoursRendered / totalHours) * 100);
+          const percentage = totalHours > 0
+          ? Math.floor((hoursRendered / totalHours) * 100)
+          : 0;
           return (
           <div className="flex flex-col gap-1 max-w-[180px]">
             <div className="flex justify-between items-center text-xs ">
