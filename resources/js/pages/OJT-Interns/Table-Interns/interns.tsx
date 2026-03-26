@@ -12,47 +12,46 @@ type InternRaw = {
   company: string;
   overallhours: number;
   renderedhours: number;
+  batchyear: string;
 };
 
 interface StudentsInternsProps {
   interns: InternRaw[];
+  batchYears: string[];
 }
 
 export default function StudentsInterns({ interns }: StudentsInternsProps) {
-
-  const formattedData: InternData[] = interns.map((item) => {
-    const completion = Math.floor((item.renderedhours / item.overallhours) * 100);
-
-    let docAudit = 1;
-    if (completion > 75) docAudit = 4;
-    else if (completion > 50) docAudit = 3;
-    else if (completion > 25) docAudit = 2;
-
-    let status: "ON-TRACK" | "EVALUATION PENDING" | "AT RISK";
-    if (completion >= 80) status = "ON-TRACK";
-    else if (completion >= 50) status = "EVALUATION PENDING";
-    else status = "AT RISK";
-
+  
+  
+  const formattedData: InternData[] = interns.map((item: any) => {
     return {
       id: item.id.toString(),
       name: item.name,
-      studentId: item.studentid,
+      studentId: item.studentId ?? item.studentid,
       company: item.company,
       role: "Intern",
-      hoursRendered: item.renderedhours,
-      totalHours: item.overallhours,
-      completion,
-      docAudit,
-      status,
+      hoursRendered: item.hoursRendered,
+      totalHours: item.totalHours,
+      completion: item.completion,
+      docAudit: item.docAudit,
+      totalDocs: item.totalDocs,
+      status: item.status,
+      batchyear: item.batchyear,
     };
-
   });
-
+  
+  const batchYears = Array.from(
+    new Set(formattedData.map(i => i.batchyear.trim()))
+  );
   const [selectedRow, setSelectedRow] = useState<InternData | null>(null);
 
   return (
     <div>
-      <DataTable columns={internColumns(setSelectedRow)} data={formattedData} />
+    <DataTable 
+      columns={internColumns(setSelectedRow)} 
+      data={formattedData} 
+      batchYears={batchYears} 
+    />    
     </div>
 
   );

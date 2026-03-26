@@ -19,6 +19,7 @@ import {
   Download
 } from "lucide-react"
 
+
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Interns',
@@ -33,9 +34,10 @@ type PageProps = {
     avgCompletion: number;
     growth: number;
   };
+  batchYears: string[];
 };
 
-export default function Interns({ interns = [] }: { interns?: any[] }) {
+export default function Interns({ interns = [], batchYears = [] }: { interns?: any[], batchYears?: string[] }) {
   const { stats } = usePage<PageProps>().props;
   const activePercent = stats.totalInterns > 0
     ? Math.round((stats.activeOjt / stats.totalInterns) * 100)
@@ -150,9 +152,8 @@ export default function Interns({ interns = [] }: { interns?: any[] }) {
 
         </div>
          <div className="px-4">
-          <StudentsInterns interns={interns} />
+        <StudentsInterns interns={interns} batchYears={batchYears} />        
         </div>
-
       </div>
 
     </AppLayout>

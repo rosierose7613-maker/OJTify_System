@@ -131,6 +131,16 @@ export default function AddStudent() {
                     />
                     </div>
                 </Field>
+                <Field className="gap-4">
+                    <div className="space-y-2">
+                    <Label>Batch Year:</Label>
+                    <Input 
+                    placeholder="Batch 2025-2026..." 
+                    value={data.overallhours} 
+                    onChange={(e)=> setData('overallhours', e.target.value)}
+                    />
+                    </div>
+                </Field>
                 </FieldGroup>
             <DialogFooter className='pt-8'>
                 <Button

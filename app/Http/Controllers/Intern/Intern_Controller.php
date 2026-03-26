@@ -14,60 +14,96 @@ use Maatwebsite\Excel\Facades\Excel;
 class Intern_Controller extends Controller
 {
 
-    private function getStatus($completion)
-    {
-        return match (true) {
-            $completion >= 80 => 'ON-TRACK',
-            $completion >= 50 => 'EVALUATION PENDING',
-            default => 'AT RISK',
-        };
-    }
+    private function getStatus($completion, $docAudit = 0, $totalDocs = 4)
+        {
+            return match (true) {
+                $completion >= 100 && $docAudit == $totalDocs => 'COMPLETED',
+                $completion >= 80 => 'EVALUATION PENDING',
+                $completion >= 50 => 'ON-GOING',
+                $completion > 0 => 'AT RISK',
+                default => 'INACTIVE',
+            };
+        }
 
 
     public function index(Request $request)
     {
         $interns = Intern::all();
 
+        $formattedInterns = $interns->map(function ($intern) {
+
+            $hoursRendered = is_numeric($intern->renderedhours) ? $intern->renderedhours : 0;
+            $totalHours = is_numeric($intern->overallhours) ? $intern->overallhours : 0;
+
+            $completion = $totalHours > 0 ? round(($hoursRendered / $totalHours) * 100) : 0;
+
+            $status = $this->getStatus(
+                $completion,
+                $intern->documentaudit,
+                $intern->total_documents
+            );
+            return [
+                'id' => $intern->id,
+                'name' => $intern->name,
+                'studentId' => $intern->studentid,
+                'company' => $intern->company,
+                
+                'role' => $intern->role,
+                'course' => $intern->course,
+
+                'hoursRendered' => $intern->renderedhours,
+                'totalHours' => $intern->overallhours,
+                'completion' => $completion,
+
+                'docAudit' => $intern->documentaudit,
+                'totalDocs' => $intern->total_documents,
+                
+                'tasksLogged' => $intern->tasks_logged ?? 0,
+                'aiPerformance' => $completion,
+
+                'status' => $status,
+
+                'batchyear' => $intern->batchyear,
+            ];
+        });
+
+        $pendingDocs = $interns->sum(function ($intern) {
+            return $intern->total_documents - $intern->documentaudit;
+        });
+
         $totalInterns = $interns->count();
 
-        $activeOjt = $interns->filter(function ($intern) {
-            $completion = $intern->overallhours > 0
-                ? ($intern->renderedhours / $intern->overallhours) * 100
-                : 0;
-
-            $status = $this->getStatus($completion);
-
-            return in_array($status, ['ON-TRACK', 'EVALUATION PENDING']);
-        })->count();        
-
-        $pendingDocs = $interns->where('docAudit', '<', 4)->count();
+        $activeOjt = $formattedInterns->filter(fn($i) =>
+            in_array($i['status'], [
+                'COMPLETED',
+                'ON-GOING',
+                'EVALUATION PENDING'
+            ])
+        )->count();
 
         $totalRendered = $interns->sum('renderedhours');
         $totalRequired = $interns->sum('overallhours');
 
-        $avgCompletion = $totalRequired > 0 
+        $avgCompletion = $totalRequired > 0
             ? round(($totalRendered / $totalRequired) * 100)
             : 0;
 
-        $currentYear = now()->year;
-        $lastYear = $currentYear - 1;
-
-        $currentInterns = Intern::whereYear('created_at', $currentYear)->count();
-
-        $lastSemesterTotal = Intern::whereYear('created_at', $lastYear)->count();
-
-        $growth = $lastSemesterTotal > 0
-            ? round((($currentInterns - $lastSemesterTotal) / $lastSemesterTotal) * 100)
-            : 0;
+        $batchYears = $interns
+            ->pluck('batchyear')
+            ->filter()
+            ->unique()
+            ->values()
+            ->toArray();
 
         return Inertia::render('OJT-Interns/Interns', [
-            'interns' => $interns,
+            'interns' => $formattedInterns,
+            'batchYears' => $batchYears, 
             'stats' => [
                 'totalInterns' => $totalInterns,
                 'activeOjt' => $activeOjt,
-                'pendingDocs' => $pendingDocs,
+                'pendingDocs' => $pendingDocs, 
                 'avgCompletion' => $avgCompletion,
-                'growth' => $growth, 
+                'growth' => 0,
             ]
         ]);
     }
@@ -79,11 +115,18 @@ class Intern_Controller extends Controller
             'studentid' => ['required', 'regex:/^[0-9]{6,9}$/'],
             'company' => 'required|string',
             'overallhours' => 'required|integer',
+             'batchyear' => 'required|string',
         ]);
 
-        Intern::create(array_merge($request->all(), [
-            'renderedhours' => 0,
-        ]));
+        Intern::create([
+        'name' => $request->name,
+        'studentid' => $request->studentid,
+        'company' => $request->company,
+        'overallhours' => $request->overallhours,
+        'renderedhours' => 0,
+        'batchyear' => $request->batchyear, 
+    ]);
+
 
         return redirect()->back();
     }
@@ -133,9 +176,7 @@ class Intern_Controller extends Controller
 
             return back()->with('message', 'Students imported successfully!');
         } catch (\Exception $e) {
-            return back()->withErrors([
-                'file' => 'Import failed: ' . $e->getMessage()
-            ]);
+            dd($e->getMessage()); 
         }
     }
 
@@ -150,22 +191,21 @@ class Intern_Controller extends Controller
             ? round(($intern->renderedhours / $intern->overallhours) * 100)
             : 0;
 
-        $status = match (true) {
-            $completion >= 80 => 'ON-TRACK',
-            $completion >= 50 => 'EVALUATION PENDING',
-            default => 'AT RISK',
-        };
-
+        $status = $this->getStatus(
+            $completion,
+            $intern->documentaudit,
+            $intern->total_documents
+        );
         return Inertia::render('OJT-Interns/View-Details', [
             'student' => [
                 'name' => $intern->name,
                 'studentId' => $intern->studentid,
-                'role' => 'Intern',
-                'course' => 'BSIT',
+                'role' => $intern->role ?? 'N/A',
+                'course' => $intern->course ?? 'N/A',
 
                 'totalHours' => $intern->overallhours,
                 'tasksLogged' => $intern->tasks_logged ?? 0,
-                'aiPerformance' => $intern->ai_performance ?? 0,
+                'aiPerformance' => $completion,
                 'milestoneProgress' => $completion,
 
                 'status' => $status,

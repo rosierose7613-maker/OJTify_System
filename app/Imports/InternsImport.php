@@ -8,21 +8,25 @@ use Maatwebsite\Excel\Concerns\WithStartRow;
 
 class InternsImport implements ToModel, WithStartRow
 {
-    // Start importing from row 2 (skip header)
     public function startRow(): int
     {
         return 2;
     }
 
-    // Map each row to the Intern model
     public function model(array $row)
     {
-        return new Intern([
-            'name' => $row[0],
-            'studentid' => $row[1],
-            'company' => $row[2],
-            'overallhours' => $row[3],
-            'renderedhours' => $row[4] ?? 0, // optional
-        ]);
+        return Intern::updateOrCreate(
+        ['studentid' => $row[0]],
+        [
+            'name' => $row[1],
+            'role' => $row[2],
+            'course' => $row[3],
+            'company' => $row[4],
+            'overallhours' => $row[5],
+            'renderedhours' => $row[6] ?? 0,
+            'documentaudit' => $row[7] ?? 0,
+            'batchyear' => $row[8],
+        ]
+    );
     }
 }

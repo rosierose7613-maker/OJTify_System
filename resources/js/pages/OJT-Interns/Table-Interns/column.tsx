@@ -14,6 +14,8 @@ import { useForm } from "@inertiajs/react";
 import { Link } from "@inertiajs/react";
 import Edit from '../Dialogss/Edit';
 
+
+
 export type InternData = {
   id: string;
   name: string;
@@ -24,6 +26,8 @@ export type InternData = {
   totalHours: number;
   completion: number;
   docAudit: number;
+  totalDocs: number;
+  batchyear: string; 
   status: "ON-TRACK" | "EVALUATION PENDING" | "AT RISK";
 };
 
@@ -114,36 +118,36 @@ export const internColumns = (
         },
       },
       {
-      accessorKey: "docAudit",
-      header: "Document Audit",
-      cell: ({ row }) => {
-        const dots = row.original.docAudit; 
-        return (
-          <div className="flex gap-2">
-            {[1, 2, 3, 4].map((i) => {
-              if (i <= dots) {
-                return <CircleCheck key={i} className="h-3.5 w-3.5 text-green-500" />;
-              } else if (i === dots + 1) {
-                return <CircleEllipsis key={i} className="h-3.5 w-3.5 text-orange-300" />;
-              } else if (i === dots + 2) {
-                return <CircleAlert key={i} className="h-3.5 w-3.5 text-red-500" />;
-              } else {
-                return <Circle key={i} className="h-3.5 w-3.5 text-gray-300" />;
-              }
-            })}
-          </div>
-        );
-      },
-    },
+  accessorKey: "docAudit",
+  header: "Document Audit",
+  cell: ({ row }) => {
+    const completed = row.original.docAudit;
+    const total = row.original.totalDocs;
+
+    return (
+      <div className="flex gap-2">
+        {[...Array(total)].map((_, i) => {
+          if (i < completed) {
+            return <CircleCheck key={i} className="h-3.5 w-3.5 text-green-500" />;
+          } else {
+            return <Circle key={i} className="h-3.5 w-3.5 text-gray-300" />;
+          }
+        })}
+      </div>
+    );
+  },
+},
       {
         accessorKey: "status",
         header: "Status",
         cell: ({ row }) => {
           const status = row.original.status;
           const colors: Record<string, string> = {
-            "ON-TRACK": "bg-green-100 text-green-800",
+            "COMPLETED": "bg-green-100 text-green-800",
+            "ON-GOING": "bg-yellow-100 text-yellow-800",
             "EVALUATION PENDING": "bg-blue-100 text-blue-800",
             "AT RISK": "bg-red-100 text-red-800",
+            "INACTIVE": "bg-gray-100 text-gray-800",
           };
           return (
             <span

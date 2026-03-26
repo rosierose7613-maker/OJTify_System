@@ -3,7 +3,10 @@
 import AppLayout from '@/layouts/app-layout'
 import type { BreadcrumbItem } from '@/types'
 import { usePage } from "@inertiajs/react";
-import { User, Users, CheckCircle, Activity, ClipboardList } from "lucide-react";
+import {DetailsTable} from './details-table';
+import { detailsColumns, ActivityLog } from './Table-StudentDetail/column';
+import { User, ZapIcon,CheckCircle, Clock } from "lucide-react";
+import {Label} from '@/components/ui/label';
 import {
   Card,
   CardContent,
@@ -28,6 +31,15 @@ interface Student {
   status: "ON-TRACK" | "EVALUATION PENDING" | "AT RISK";
 }
 
+const logs = [
+  {
+    date: "Mar 15",
+    description: "Final API deployment & validation",
+    duration: "8h 00m",
+    status: "Verified",
+  },
+];
+
 export default function ViewDetails() {
   const { student } = usePage<{ student: Student }>().props;
   const initial = student.name.charAt(0).toUpperCase();
@@ -42,21 +54,13 @@ export default function ViewDetails() {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <div className="p-6 space-y-6">
-
-        <div>
-          <h1 className="text-2xl font-bold">Intern Details</h1>
-          <p className="text-sm text-gray-500">
-            Track intern performance and progress
-          </p>
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 px-4">
 
           <div className="lg:col-span-1">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-sm">
-                  <User className="w-4 h-4" />
+                  <User className="w-4 h-4 text-blue-600" />
                   Student Profile
                 </CardTitle>
               </CardHeader>
@@ -69,15 +73,12 @@ export default function ViewDetails() {
                 <div>
                   <h2 className="font-bold text-lg">{student.name}</h2>
                   <p className="text-sm text-gray-500">{student.role}</p>
-                  <p className="text-sm text-gray-400">{student.course}</p>
                   <p className="text-xs text-gray-400 mt-1">
-                    ID: {student.studentId}
+                    Student ID: {student.studentId}
                   </p>
+                  <p className="text-sm text-blue-600">{student.course}</p>
+                  
                 </div>
-
-                <span className={`px-3 py-1 text-xs font-semibold rounded-full ${statusColors[student.status]}`}>
-                  {student.status}
-                </span>
               </CardContent>
             </Card>
           </div>
@@ -85,21 +86,16 @@ export default function ViewDetails() {
           <div className="lg:col-span-3 space-y-6">
 
             <div>
-              <h2 className="text-xl font-semibold">Overall Summary</h2>
-              <p className="text-xs text-gray-500">
-                Weekly performance overview
-              </p>
+              <h2 className="text-xl font-semibold">Student Details</h2>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between py-2">
+                <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle className="text-sm text-gray-600">
                     Total Hours
                   </CardTitle>
                   <div className="p-2 rounded-lg bg-blue-100">
-                    <Activity className="h-4 w-4 text-blue-600" />
+                    <Clock className="h-4 w-4 text-blue-600" />
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -108,12 +104,12 @@ export default function ViewDetails() {
               </Card>
 
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between py-2">
+                <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle className="text-sm text-gray-600">
-                    Tasks
+                    Tasks Logged
                   </CardTitle>
                   <div className="p-2 rounded-lg bg-green-100">
-                    <ClipboardList className="h-4 w-4 text-green-600" />
+                    <CheckCircle className="h-4 w-4 text-green-600" />
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -122,64 +118,27 @@ export default function ViewDetails() {
               </Card>
 
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between py-2">
+                <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle className="text-sm text-gray-600">
-                    AI Score
+                    Performance
                   </CardTitle>
                   <div className="p-2 rounded-lg bg-purple-100">
-                    <CheckCircle className="h-4 w-4 text-purple-600" />
+                    <ZapIcon className="h-4 w-4 text-purple-600" />
                   </div>
                 </CardHeader>
                 <CardContent>
                   <h2 className="text-lg font-bold">{student.aiPerformance}%</h2>
                 </CardContent>
               </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between py-2">
-                  <CardTitle className="text-sm text-gray-600">
-                    Completion
-                  </CardTitle>
-                  <div className="p-2 rounded-lg bg-orange-100">
-                    <Users className="h-4 w-4 text-orange-600" />
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <h2 className="text-lg font-bold">{progress}%</h2>
-                </CardContent>
-              </Card>
             </div>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Work Progress</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex justify-between text-xs mb-1">
-                  <span>Progress</span>
-                  <span>{progress}%</span>
-                </div>
-
-                <div className="bg-gray-200 h-2 rounded-full">
-                  <div
-                    className="bg-blue-500 h-2 rounded-full"
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Executive Summary</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-600">
-                  {student.executiveSummary}
-                </p>
-              </CardContent>
-            </Card>
-
+            <div>
+              <Label className="text-sm text-gray-600">
+                  Activity Log Snapshot
+              </Label>
+              <div>
+                <DetailsTable columns={detailsColumns} data={logs} />
+              </div>
+            </div>
           </div>
         </div>
       </div>

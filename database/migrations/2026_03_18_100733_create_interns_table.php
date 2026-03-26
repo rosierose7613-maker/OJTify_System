@@ -14,13 +14,16 @@ return new class extends Migration
         Schema::create('interns', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('role');
             $table->string('studentid', 6);
+            $table->string('course');
             $table->string('company');
             $table->integer('overallhours');
             $table->integer('renderedhours')->default(0);
+            $table->integer('documentaudit')->default(0);
+            $table->integer('total_documents')->default(4);
+            $table->string('batchyear', 9);
             $table->integer('tasks_logged')->default(0);
-            $table->integer('ai_performance')->default(0);
-            $table->text('executive_summary')->nullable();
             $table->timestamps();
         });
     }

@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Intern extends Model
 {
     protected $fillable = [
-        'name', 
-        'studentid', 
-        'company', 
-        'overallhours', 
-        'renderedhours'
+    'name',
+    'role',
+    'studentid',
+    'course',
+    'company',
+    'overallhours',
+    'renderedhours',
+    'documentaudit',
+    'batchyear',
     ];
 }
