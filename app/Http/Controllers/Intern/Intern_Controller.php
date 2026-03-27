@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use App\Models\ActivityLog;
 
 use App\Imports\InternsImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -18,7 +19,6 @@ class Intern_Controller extends Controller
         {
             return match (true) {
                 $completion >= 100 && $docAudit == $totalDocs => 'COMPLETED',
-                $completion >= 80 => 'EVALUATION PENDING',
                 $completion >= 50 => 'ON-GOING',
                 $completion > 0 => 'AT RISK',
                 default => 'INACTIVE',
@@ -80,7 +80,6 @@ class Intern_Controller extends Controller
             in_array($i['status'], [
                 'COMPLETED',
                 'ON-GOING',
-                'EVALUATION PENDING'
             ])
         )->count();
 
@@ -190,6 +189,8 @@ class Intern_Controller extends Controller
     
     public function show(Intern $intern)
     {
+        $logs = ActivityLog::where('intern_id', $intern->id)->get();
+
         $completion = $intern->overallhours > 0
             ? round(($intern->renderedhours / $intern->overallhours) * 100)
             : 0;
@@ -207,13 +208,14 @@ class Intern_Controller extends Controller
                 'course' => $intern->course ?? 'N/A',
 
                 'totalHours' => $intern->overallhours,
-                'tasksLogged' => $intern->tasks_logged ?? 0,
+                'tasksLogged' => $logs->count(),
                 'aiPerformance' => $completion,
                 'milestoneProgress' => $completion,
-
+                
                 'status' => $status,
-                'executiveSummary' => $intern->executive_summary ?? 'No summary available.'
-            ]
+                'executiveSummary' => $intern->executive_summary ?? 'No summary available.',
+            ],
+            'logs' => $logs,
         ]);
     }
 

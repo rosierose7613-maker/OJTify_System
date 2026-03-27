@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarFoldIcon, Check } from "lucide-react";
+import { CalendarFoldIcon, Check, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table } from "@tanstack/react-table";
 import {
@@ -27,6 +27,7 @@ export default function BatchYearFilter<TData>({
         <Button variant="outline" className="flex gap-1 text-gray-500">
           <CalendarFoldIcon className="h-4 w-4" />
           Batch Year
+          <ChevronDown className="h-4 w-4"/>
         </Button>
       </DropdownMenuTrigger>
 
@@ -34,7 +35,6 @@ export default function BatchYearFilter<TData>({
         <DropdownMenuCheckboxItem
           onClick={() => table.getColumn("batchyear")?.setFilterValue(undefined)}
         >
-           {currentFilter === undefined && <Check className="h-4 w-4 mr-2" />}
           All
         </DropdownMenuCheckboxItem>
 

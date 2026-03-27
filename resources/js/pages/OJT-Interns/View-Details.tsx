@@ -31,17 +31,14 @@ interface Student {
   status: "ON-TRACK" | "EVALUATION PENDING" | "AT RISK";
 }
 
-const logs = [
-  {
-    date: "Mar 15",
-    description: "Final API deployment & validation",
-    duration: "8h 00m",
-    status: "Verified",
-  },
-];
 
 export default function ViewDetails() {
-  const { student } = usePage<{ student: Student }>().props;
+  type PageProps = {
+  student: Student;
+  logs: ActivityLog[];
+};
+
+const { student, logs } = usePage<PageProps>().props;
   const initial = student.name.charAt(0).toUpperCase();
   const progress = student.milestoneProgress;
 
@@ -99,7 +96,7 @@ export default function ViewDetails() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <h2 className="text-lg font-bold">{student.totalHours}</h2>
+                  <h2 className="text-lg font-bold">{student.totalHours}h</h2>
                 </CardContent>
               </Card>
 

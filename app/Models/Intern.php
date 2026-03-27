@@ -17,4 +17,9 @@ class Intern extends Model
     'documentaudit',
     'batchyear',
     ];
+
+     public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
 }

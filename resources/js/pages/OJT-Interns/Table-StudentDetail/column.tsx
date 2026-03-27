@@ -14,7 +14,7 @@ export const detailsColumns: ColumnDef<ActivityLog>[] = [
   {
     accessorKey: "date",
     header: () => (
-      <Label className="text-gray-400 text-xs uppercase">
+      <Label className="text-black text-xs">
         Date
       </Label>
     ),
@@ -22,7 +22,7 @@ export const detailsColumns: ColumnDef<ActivityLog>[] = [
   {
     accessorKey: "description",
     header: () => (
-      <Label className="text-gray-400 text-xs uppercase">
+      <Label className="text-black text-xs pl-4">
         Task Description
       </Label>
     ),
@@ -30,7 +30,7 @@ export const detailsColumns: ColumnDef<ActivityLog>[] = [
   {
     accessorKey: "duration",
     header: () => (
-      <Label className="text-gray-400 text-xs uppercase">
+      <Label className="text-black text-xs">
         Duration
       </Label>
     ),
@@ -41,7 +41,7 @@ export const detailsColumns: ColumnDef<ActivityLog>[] = [
   {
     accessorKey: "status",
     header: () => (
-      <Label className="text-gray-400 text-xs uppercase text-right w-full block">
+      <Label className="text-black text-xs text-right w-full block pr-4">
         Status
       </Label>
     ),
@@ -49,7 +49,7 @@ export const detailsColumns: ColumnDef<ActivityLog>[] = [
       const status = row.original.status;
 
       return (
-        <div className="text-right">
+        <div className="text-right pr-4">
           <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
             {status}
           </span>
