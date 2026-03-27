@@ -24,6 +24,7 @@ interface Student {
   role: string;
   course: string;
   totalHours: number;
+  renderedHours: number;
   tasksLogged: number;
   aiPerformance: number;
   milestoneProgress: number;
@@ -69,7 +70,6 @@ const { student, logs } = usePage<PageProps>().props;
 
                 <div>
                   <h2 className="font-bold text-lg">{student.name}</h2>
-                  <p className="text-sm text-gray-500">{student.role}</p>
                   <p className="text-xs text-gray-400 mt-1">
                     Student ID: {student.studentId}
                   </p>
@@ -89,14 +89,14 @@ const { student, logs } = usePage<PageProps>().props;
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle className="text-sm text-gray-600">
-                    Total Hours
+                    Total Rendered Hours
                   </CardTitle>
                   <div className="p-2 rounded-lg bg-blue-100">
                     <Clock className="h-4 w-4 text-blue-600" />
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <h2 className="text-lg font-bold">{student.totalHours}h</h2>
+                  <h2 className="text-lg font-bold">{student.renderedHours}h</h2>
                 </CardContent>
               </Card>
 

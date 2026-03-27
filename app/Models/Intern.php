@@ -8,7 +8,6 @@ class Intern extends Model
 {
     protected $fillable = [
     'name',
-    'role',
     'studentid',
     'course',
     'company',

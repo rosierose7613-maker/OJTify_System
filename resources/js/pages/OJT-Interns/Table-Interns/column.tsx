@@ -20,8 +20,8 @@ export type InternData = {
   id: string;
   name: string;
   studentId: string;
+  course: string;
   company: string;
-  role: string;
   hoursRendered: number;
   totalHours: number;
   completion: number;

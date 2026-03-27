@@ -118,16 +118,21 @@ class Intern_Controller extends Controller
             'company' => 'required|string',
             'overallhours' => 'required|integer',
              'batchyear' => 'required|string',
+             'course' => 'required|string',
         ]);
 
         Intern::create([
-        'name' => $request->name,
-        'studentid' => $request->studentid,
-        'company' => $request->company,
-        'overallhours' => $request->overallhours,
-        'renderedhours' => 0,
-        'batchyear' => $request->batchyear, 
-    ]);
+            'name' => $request->name,
+            'studentid' => $request->studentid,
+            'course' => $request->course,
+            'company' => $request->company,
+            'overallhours' => $request->overallhours,
+            'renderedhours' => 0,
+            'documentaudit' => 0,
+            'total_documents' => 4,
+            'tasks_logged' => 0,
+            'batchyear' => $request->batchyear,
+        ]);
 
 
         return redirect()->back();
@@ -144,13 +149,17 @@ class Intern_Controller extends Controller
             ],
             'company' => ['required', 'string'],
             'overallhours' => ['required', 'integer'],
+            'course' => ['required', 'string'],
+            'batchyear' => ['required', 'string'],
         ]);
 
         $intern->update([
             'name' => $request->name,
             'studentid' => $request->studentid,
+            'course' => $request->course,
             'company' => $request->company,
             'overallhours' => $request->overallhours,
+            'batchyear' => $request->batchyear,
         ]);
 
         return redirect()->back()->with('message', 'Updated successfully');
@@ -208,6 +217,7 @@ class Intern_Controller extends Controller
                 'course' => $intern->course ?? 'N/A',
 
                 'totalHours' => $intern->overallhours,
+                'renderedHours' => $intern->renderedhours,
                 'tasksLogged' => $logs->count(),
                 'aiPerformance' => $completion,
                 'milestoneProgress' => $completion,

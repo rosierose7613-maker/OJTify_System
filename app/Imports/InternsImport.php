@@ -19,14 +19,13 @@ class InternsImport implements ToModel, WithStartRow
         ['studentid' => $row[0]],
         [
             'name' => $row[1],
-            'role' => $row[2],
-            'course' => $row[3],
-            'company' => $row[4],
-            'overallhours' => $row[5],
-            'renderedhours' => $row[6] ?? 0,
-            'documentaudit' => $row[7] ?? 0,
+            'course' => $row[2],
+            'company' => $row[3],
+            'overallhours' => $row[4],
+            'renderedhours' => $row[5] ?? 0,
+            'documentaudit' => $row[6] ?? 0,
             'total_documents' => 4,
-            'batchyear' => $row[8],
+            'batchyear' => $row[7],
         ]
     );
     }

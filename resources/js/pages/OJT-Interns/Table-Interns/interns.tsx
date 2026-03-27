@@ -29,7 +29,7 @@ export default function StudentsInterns({ interns }: StudentsInternsProps) {
       name: item.name,
       studentId: item.studentId ?? item.studentid,
       company: item.company,
-      role: "Intern",
+      course: item.course,
       hoursRendered: item.hoursRendered,
       totalHours: item.totalHours,
       completion: item.completion,

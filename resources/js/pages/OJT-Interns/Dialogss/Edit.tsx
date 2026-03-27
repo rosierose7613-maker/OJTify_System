@@ -23,9 +23,11 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 interface InternEdit {
   id: string;
   name: string;
+  course: string;
   studentId: string;    
   company: string;
-  totalHours: number;   
+  totalHours: number;
+  batchyear:string;   
 }
 
 interface Props {
@@ -35,11 +37,13 @@ interface Props {
 export default function Edit({ intern }: Props) {
   const [open, setOpen] = useState(false);
 
-  const { data, setData, put, processing, errors, recentlySuccessful  } = useForm({
-    name: intern.name,
+  const { data, setData, put, processing, recentlySuccessful  } = useForm({
+     name: intern.name,
     studentid: intern.studentId,
+    course: intern.course,
     company: intern.company,
     overallhours: intern.totalHours,
+    batchyear: intern.batchyear,
     });
 
   const handleUpdate = (e: React.FormEvent) => {
@@ -86,50 +90,62 @@ export default function Edit({ intern }: Props) {
               </Alert>
             )}
             </div>
-
             <FieldGroup>
-              <Field className="gap-4 pt-4">
-                <div className="space-y-2">
-                  <Label>Student Name:</Label>
-                  <Input
-                    value={data.name}
-                    onChange={(e) => setData("name", e.target.value)}
-                  />
-                </div>
-              </Field>
-
               <Field className="gap-4">
-              <div className="space-y-2">
-                <Label>Student ID:</Label>
-                <Input
-                  value={data.studentid}
-                  readOnly
-                  className="bg-gray-100 cursor-not-allowed"
-                />
-              </div>
-            </Field>
+                    <div className="space-y-2">
+                    <Label>Batch Year:</Label>
+                    <Input
+                      value={data.batchyear}
+                      onChange={(e) => setData("batchyear", e.target.value)}
+                    />
+                    </div>
+                </Field>
+                <Field className='gap-4'>
+                    <div className="space-y-2">
+                    <Label>Student Name:</Label>
+                    <Input
+                      value={data.name}
+                      onChange={(e) => setData("name", e.target.value)}
+                    />
+                    </div>
+                </Field>
+                <Field className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                    <Label>Student ID:</Label>
+                    <Input
+                      value={data.studentid}
+                      readOnly
+                      className="bg-gray-100 cursor-not-allowed"
+                    />
+                    </div>
 
-              <Field className="gap-4">
-                <div className="space-y-2">
-                  <Label>Company:</Label>
-                  <Input
-                    value={data.company}
-                    onChange={(e) => setData("company", e.target.value)}
-                  />
-                </div>
-              </Field>
+                    <div className="space-y-2">
+                    <Label>Course:</Label>
+                    <Input
+                      value={data.course}
+                      onChange={(e) => setData("course", e.target.value)}
+                    />
+                    </div>
+                </Field>
+                <Field className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                    <Label>Company:</Label>
+                    <Input
+                      value={data.company}
+                      onChange={(e) => setData("company", e.target.value)}
+                    />
+                    </div>
 
-              <Field className="gap-4">
-                <div className="space-y-2">
-                  <Label>Overall Hours:</Label>
-                  <Input
-                    value={data.overallhours}
-                    onChange={(e) =>
-                      setData("overallhours", Number(e.target.value))
-                    }
-                  />
-                </div>
-              </Field>
+                    <div className="space-y-2">
+                    <Label>Overall Hours:</Label>
+                    <Input
+                      value={data.overallhours}
+                      onChange={(e) =>
+                        setData("overallhours", Number(e.target.value))
+                      }
+                    />
+                    </div>
+                 </Field>
             </FieldGroup>
 
             <DialogFooter className="pt-4">

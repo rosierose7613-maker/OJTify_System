@@ -78,8 +78,8 @@ export default function Interns({ interns = [], batchYears = [] }: { interns?: a
                 {stats.totalInterns}
               </div>
 
-              <p className={`text-xs ${stats.growth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                {stats.growth >= 0 ? '+' : ''}{stats.growth}% from last semester
+              <p className='text-xs text-green-600'>
+                Lorem Ipsum
               </p>
             </CardContent>
           </Card>

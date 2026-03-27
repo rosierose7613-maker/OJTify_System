@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useForm } from "@inertiajs/react";
 import { Button } from "@/components/ui/button";
 import {Separator} from '@/components/ui/separator';
+import { router } from "@inertiajs/react";
 import {
   Dialog,
   DialogContent,
@@ -35,11 +36,22 @@ export default function ImportDialog() {
     if (file) handleFileChange(file);
   };
 
-  const handleUpload = () => {
-    post("/interns/import", {
-      forceFormData: true,
-    });
-  };
+    const handleUpload = () => {
+      post("/interns/import", {
+        forceFormData: true,
+
+        onSuccess: () => {
+          setFileName("");
+          setData("file", null);
+
+          if (fileInput.current) {
+            fileInput.current.value = "";
+          }
+
+          router.reload({ only: ["interns", "stats"] });
+        },
+      });
+    };
 
   return (
     <Dialog>

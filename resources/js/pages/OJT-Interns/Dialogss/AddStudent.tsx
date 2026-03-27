@@ -23,9 +23,11 @@ export default function AddStudent() {
     const {data, setData, post, processing, errors, reset, recentlySuccessful  } = useForm ({
         name:'',
         studentid:'',
+        course: '',
         company:'',
         overallhours:'',
-        renderedhours:''
+        renderedhours:'',
+        batchyear: ''
     });
 
     const [idExists, setIdExists] = useState(false);
@@ -91,6 +93,16 @@ export default function AddStudent() {
                         </Alert>
                         )}
                     </div>
+                <Field className="gap-4">
+                    <div className="space-y-2">
+                    <Label>Batch Year:</Label>
+                    <Input 
+                    placeholder="Batch 2025-2026..." 
+                    value={data.batchyear} 
+                    onChange={(e)=> setData('batchyear', e.target.value)}
+                    />
+                    </div>
+                </Field>
                 <Field className='gap-4'>
                     <div className="space-y-2">
                     <Label>Student Name:</Label>
@@ -100,7 +112,7 @@ export default function AddStudent() {
                     onChange={(e)=> setData('name', e.target.value)}/>
                     </div>
                 </Field>
-                <Field className='gap-4'>
+                <Field className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                     <Label>Student ID:</Label>
                     <Input
@@ -108,11 +120,19 @@ export default function AddStudent() {
                     inputMode="numeric"
                     maxLength={6}
                     value={data.studentid}
-                    onChange={(e) =>setData('studentid', e.target.value.replace(/[^0-9]/g, ''))}
+                    onChange={(e) =>setData('studentid', e.target.value.replace(/[^0-9]/g, ''))}/>
+                    </div>
+
+                    <div className="space-y-2">
+                    <Label>Course:</Label>
+                    <Input
+                    placeholder="Course (e.g. BSIT)"
+                    value={data.course}
+                    onChange={(e) => setData('course', e.target.value)}
                     />
                     </div>
                 </Field>
-                <Field className='gap-4'>
+                <Field className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                     <Label>Company:</Label>
                     <Input 
@@ -120,8 +140,7 @@ export default function AddStudent() {
                     value={data.company} 
                     onChange={(e)=> setData('company', e.target.value)}/>
                     </div>
-                </Field>
-                <Field className="gap-4">
+
                     <div className="space-y-2">
                     <Label>Overall Hours:</Label>
                     <Input 
@@ -130,17 +149,7 @@ export default function AddStudent() {
                     onChange={(e)=> setData('overallhours', e.target.value)}
                     />
                     </div>
-                </Field>
-                <Field className="gap-4">
-                    <div className="space-y-2">
-                    <Label>Batch Year:</Label>
-                    <Input 
-                    placeholder="Batch 2025-2026..." 
-                    value={data.overallhours} 
-                    onChange={(e)=> setData('overallhours', e.target.value)}
-                    />
-                    </div>
-                </Field>
+                 </Field>
                 </FieldGroup>
             <DialogFooter className='pt-8'>
                 <Button
