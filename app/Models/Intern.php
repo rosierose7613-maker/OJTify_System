@@ -13,6 +13,8 @@ class Intern extends Model
     'company',
     'overallhours',
     'renderedhours',
+    'total_documents',
+    'tasks_logged',
     'documentaudit',
     'batchyear',
     ];

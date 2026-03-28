@@ -48,7 +48,6 @@ class Intern_Controller extends Controller
                 'studentId' => $intern->studentid,
                 'company' => $intern->company,
                 
-                'role' => $intern->role,
                 'course' => $intern->course,
 
                 'hoursRendered' => $intern->renderedhours,
@@ -213,7 +212,6 @@ class Intern_Controller extends Controller
             'student' => [
                 'name' => $intern->name,
                 'studentId' => $intern->studentid,
-                'role' => $intern->role ?? 'N/A',
                 'course' => $intern->course ?? 'N/A',
 
                 'totalHours' => $intern->overallhours,
